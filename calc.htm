@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversor de Moedas</title>
+    <style>
+        /* Estilos CSS podem ser colocados aqui */
+    </style>
+</head>
+<body>
+    <h1>Conversor de Moedas</h1>
+
+    <h2>Real para Bitcoin</h2>
+    <form id="realToBitcoinForm">
+        <label for="realAmount">Valor em Real (BRL):</label>
+        <input type="number" step="0.01" id="realAmount" required>
+        <button type="button" onclick="convertRealToBitcoin()">Converter</button>
+    </form>
+
+    <h2>Bitcoin para Real</h2>
+    <form id="bitcoinToRealForm">
+        <label for="bitcoinAmount">Valor em Bitcoin (BTC):</label>
+        <input type="number" step="0.00000001" id="bitcoinAmount" required>
+        <button type="button" onclick="convertBitcoinToReal()">Converter</button>
+    </form>
+
+    <h3 id="result"></h3>
+
+    <script>
+        function getBitcoinPrice(callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://api.coinbase.com/v2/prices/BTC-BRL/spot', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var bitcoinPrice = parseFloat(response.data.amount);
+                    callback(bitcoinPrice);
+                }
+            };
+            xhr.send();
+        }
+
+        function convertRealToBitcoin() {
+            var realAmount = parseFloat(document.getElementById('realAmount').value);
+            getBitcoinPrice(function(bitcoinPrice) {
+                var bitcoinAmount = realAmount / bitcoinPrice;
+                bitcoinAmount -= bitcoinAmount * 0.07;
+                document.getElementById('result').innerText = realAmount + ' BRL equivale a ' + bitcoinAmount.toFixed(8) + ' BTC';
+            });
+        }
+
+        function convertBitcoinToReal() {
+            var bitcoinAmount = parseFloat(document.getElementById('bitcoinAmount').value);
+            getBitcoinPrice(function(bitcoinPrice) {
+                var realAmount = bitcoinAmount * bitcoinPrice;
+                realAmount -= realAmount * 0.07;
+                document.getElementById('result').innerText = bitcoinAmount + ' BTC equivale a ' + realAmount.toFixed(8) + ' BRL';
+            });
+        }
+    </script>
+</body>
+</html>
