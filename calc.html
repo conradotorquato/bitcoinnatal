@@ -43,7 +43,7 @@
             var realAmount = parseFloat(document.getElementById('realAmount').value);
             getBitcoinPrice(function(bitcoinPrice) {
                 var bitcoinAmount = realAmount / bitcoinPrice;
-                bitcoinAmount -= bitcoinAmount * 0.07;
+                bitcoinAmount -= bitcoinAmount * 0.05;
                 document.getElementById('result').innerText = realAmount + ' BRL equivale a ' + bitcoinAmount.toFixed(8) + ' BTC';
             });
         }
@@ -52,7 +52,7 @@
             var bitcoinAmount = parseFloat(document.getElementById('bitcoinAmount').value);
             getBitcoinPrice(function(bitcoinPrice) {
                 var realAmount = bitcoinAmount * bitcoinPrice;
-                realAmount -= realAmount * 0.07;
+                realAmount -= realAmount * 0.05;
                 document.getElementById('result').innerText = bitcoinAmount + ' BTC equivale a ' + realAmount.toFixed(8) + ' BRL';
             });
         }
